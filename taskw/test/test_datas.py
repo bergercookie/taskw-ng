@@ -6,7 +6,7 @@ import dateutil.tz
 
 import pytest
 
-from taskw import TaskWarriorDirect, TaskWarriorShellout
+from taskw import TaskWarriorShellout
 
 
 TASK = {'description': "task 2 http://www.google.com/",
@@ -327,21 +327,6 @@ class _BaseTestDB(object):
 
         # For issue #26, I thought this would raise an exception...
         self.tw.get_task(description='foobar1')
-
-
-class TestDBDirect(_BaseTestDB):
-    class_to_test = TaskWarriorDirect
-
-    def test_delete_completed(self):
-        task = self.tw.task_add("foobar")
-        task = self.tw.task_done(uuid=task['uuid'])
-        self.tw.task_delete(uuid=task['uuid'])
-        tasks = self.tw.load_tasks()
-        assert len(tasks['pending']) == 0
-        assert len(tasks['completed']) == 1
-
-    def should_skip(self):
-        return False
 
 
 class TestDBShellout(_BaseTestDB):

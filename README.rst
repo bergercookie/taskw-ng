@@ -6,13 +6,7 @@ taskw - Python API for the taskwarrior DB
 This is a python API for the `taskwarrior <http://taskwarrior.org>`_ command
 line tool.
 
-It contains two implementations: ``taskw.TaskWarriorShellout`` and
-``taskw.TaskWarriorDirect``.  The first implementation is the supported one
-recommended by the upstream taskwarrior core project.  It uses the ``task
-export`` and ``task import`` commands to manipulate the task database.  The
-second implementation opens the task db file itself and directly manipulates
-it.  It exists for backwards compatibility, but should only be used when
-necessary.
+It mainly contains the ``taskw.TaskWarriorShellout`` class
 
 Build Status
 ------------
