@@ -25,9 +25,7 @@ class StringField(Field):
         if not isinstance(value, str):
             string_value = str(value)
             logger.debug(
-                "Value %s serialized to string as '%s'",
-                repr(value),
-                string_value
+                "Value %s serialized to string as '%s'", repr(value), string_value
             )
             value = string_value
         for left, right in encode_replacements_experimental.items():

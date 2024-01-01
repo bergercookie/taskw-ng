@@ -24,7 +24,7 @@ class TestAnnotationArrayField(TestCase):
     def test_serialize_annotations_into_strings(self):
         value = [
             Annotation("something", "20240101T010101Z"),
-            Annotation("something else")
+            Annotation("something else"),
         ]
 
         expected_serialized = ["something", "something else"]
@@ -39,19 +39,16 @@ class TestAnnotationArrayField(TestCase):
         # to the below, but we are asserting that we can extract treat
         # the returned entries just as if they were strings.
         value = [
+            {"description": "Coddingtonbear's birthday", "entry": "19840302T000000Z"},
             {
-                'description': 'Coddingtonbear\'s birthday',
-                'entry': '19840302T000000Z'
+                "description": "Coddingtonbear's partner's birthday",
+                "entry": "19850711T000000Z",
             },
-            {
-                'description': 'Coddingtonbear\'s partner\'s birthday',
-                'entry': '19850711T000000Z',
-            }
         ]
 
         expected_results = [
-            value[0]['description'],
-            value[1]['description'],
+            value[0]["description"],
+            value[1]["description"],
         ]
         actual_results = self.field.deserialize(value)
 
@@ -62,19 +59,16 @@ class TestAnnotationArrayField(TestCase):
         # to the above, but we are asserting that we can extract a little
         # bit more information from the returned objects.
         value = [
+            {"description": "Coddingtonbear's birthday", "entry": "19840302T000000Z"},
             {
-                'description': 'Coddingtonbear\'s birthday',
-                'entry': '19840302T000000Z'
+                "description": "Coddingtonbear's partner's birthday",
+                "entry": "19850711T000000Z",
             },
-            {
-                'description': 'Coddingtonbear\'s partner\'s birthday',
-                'entry': '19850711T000000Z',
-            }
         ]
 
         expected_results = [
-            Annotation(value[0]['description'], value[0]['entry']),
-            Annotation(value[1]['description'], value[1]['entry']),
+            Annotation(value[0]["description"], value[0]["entry"]),
+            Annotation(value[1]["description"], value[1]["entry"]),
         ]
         actual_results = self.field.deserialize(value)
 
@@ -111,11 +105,11 @@ class TestArrayField(TestCase):
 class TestChoiceField(TestCase):
     def test_serialize_ok(self):
         field = fields.ChoiceField(
-            choices=['A', 'B', 'C'],
+            choices=["A", "B", "C"],
             nullable=False,
             case_sensitive=True,
         )
-        acceptable_value = 'A'
+        acceptable_value = "A"
 
         actual_value = field.serialize(acceptable_value)
         expected_value = acceptable_value
@@ -124,18 +118,18 @@ class TestChoiceField(TestCase):
 
     def test_serialize_wrong_case(self):
         field = fields.ChoiceField(
-            choices=['A', 'B', 'C'],
+            choices=["A", "B", "C"],
             nullable=False,
             case_sensitive=True,
         )
-        unacceptable_wrong_case = 'a'
+        unacceptable_wrong_case = "a"
 
         with self.assertRaises(ValueError):
             field.serialize(unacceptable_wrong_case)
 
     def test_serialize_none_unacceptable(self):
         field = fields.ChoiceField(
-            choices=['A', 'B', 'C'],
+            choices=["A", "B", "C"],
             nullable=False,
             case_sensitive=True,
         )
@@ -146,7 +140,7 @@ class TestChoiceField(TestCase):
 
     def test_serialize_none_acceptable(self):
         field = fields.ChoiceField(
-            choices=[None, 'A', 'B', 'C'],
+            choices=[None, "A", "B", "C"],
             case_sensitive=True,
         )
         acceptable_none_value = None
@@ -158,11 +152,11 @@ class TestChoiceField(TestCase):
 
     def test_serialize_case_insensitive(self):
         field = fields.ChoiceField(
-            choices=['A', 'B', 'C'],
+            choices=["A", "B", "C"],
             nullable=False,
             case_sensitive=False,
         )
-        value_wrong_case = 'a'
+        value_wrong_case = "a"
 
         actual_value = field.serialize(value_wrong_case)
         expected_value = value_wrong_case
@@ -190,13 +184,13 @@ class TestCommaSeparatedUUIDField(TestCase):
         ]
 
         actual_value = self.field.serialize(many_uuids)
-        expected_value = ','.join([str(u) for u in many_uuids])
+        expected_value = ",".join([str(u) for u in many_uuids])
 
         self.assertEqual(actual_value, expected_value)
 
     def test_deserialize_uuid_string(self):
         arbitrary_uuids = [uuid.uuid4(), uuid.uuid4()]
-        uuid_strings = ','.join([str(u) for u in arbitrary_uuids])
+        uuid_strings = ",".join([str(u) for u in arbitrary_uuids])
 
         actual_value = self.field.deserialize(uuid_strings)
         expected_value = arbitrary_uuids
@@ -205,7 +199,7 @@ class TestCommaSeparatedUUIDField(TestCase):
 
     def test_deserialize_uuid_string_undashed(self):
         arbitrary_uuids = [uuid.uuid4(), uuid.uuid4()]
-        uuid_strings = ','.join([u.hex for u in arbitrary_uuids])
+        uuid_strings = ",".join([u.hex for u in arbitrary_uuids])
 
         actual_value = self.field.deserialize(uuid_strings)
         expected_value = arbitrary_uuids
@@ -231,15 +225,13 @@ class TestDateField(TestCase):
         arbitrary_minute = 10
         arbitrary_second = 3
 
-        naive_date_string = (
-            '{year}-{month}-{day}T{hour}:{minute}:{second}'.format(
-                year=arbitrary_year,
-                month=arbitrary_month,
-                day=arbitrary_day,
-                hour=arbitrary_hour,
-                minute=arbitrary_minute,
-                second=arbitrary_second,
-            )
+        naive_date_string = "{year}-{month}-{day}T{hour}:{minute}:{second}".format(
+            year=arbitrary_year,
+            month=arbitrary_month,
+            day=arbitrary_day,
+            hour=arbitrary_hour,
+            minute=arbitrary_minute,
+            second=arbitrary_second,
         )
 
         actual_value = self.field.deserialize(naive_date_string)
@@ -250,7 +242,7 @@ class TestDateField(TestCase):
             arbitrary_hour,
             arbitrary_minute,
             arbitrary_second,
-            tzinfo=UTC
+            tzinfo=UTC,
         )
 
         self.assertEqual(actual_value, expected_value)
@@ -263,15 +255,13 @@ class TestDateField(TestCase):
         arbitrary_minute = 10
         arbitrary_second = 3
 
-        nonnaive_date_string = (
-            '{year}-{month}-{day}T{hour}:{minute}:{second}Z'.format(
-                year=arbitrary_year,
-                month=arbitrary_month,
-                day=arbitrary_day,
-                hour=arbitrary_hour,
-                minute=arbitrary_minute,
-                second=arbitrary_second,
-            )
+        nonnaive_date_string = "{year}-{month}-{day}T{hour}:{minute}:{second}Z".format(
+            year=arbitrary_year,
+            month=arbitrary_month,
+            day=arbitrary_day,
+            hour=arbitrary_hour,
+            minute=arbitrary_minute,
+            second=arbitrary_second,
         )
 
         actual_value = self.field.deserialize(nonnaive_date_string)
@@ -282,7 +272,7 @@ class TestDateField(TestCase):
             arbitrary_hour,
             arbitrary_minute,
             arbitrary_second,
-            tzinfo=UTC
+            tzinfo=UTC,
         )
 
         self.assertEqual(actual_value, expected_value)
@@ -313,7 +303,7 @@ class TestDateField(TestCase):
         actual_value = self.field.serialize(arbitrary_date)
         expected_value = UTC.normalize(
             arbitrary_date.replace(tzinfo=tzlocal())
-        ).strftime('%Y%m%dT%H%M%SZ')
+        ).strftime("%Y%m%dT%H%M%SZ")
 
         self.assertEqual(actual_value, expected_value)
 
@@ -332,13 +322,11 @@ class TestDateField(TestCase):
             arbitrary_hour,
             arbitrary_minute,
             arbitrary_second,
-            tzinfo=timezone('America/Los_Angeles')
+            tzinfo=timezone("America/Los_Angeles"),
         )
 
         actual_value = self.field.serialize(arbitrary_date)
-        expected_value = UTC.normalize(
-            arbitrary_date
-        ).strftime('%Y%m%dT%H%M%SZ')
+        expected_value = UTC.normalize(arbitrary_date).strftime("%Y%m%dT%H%M%SZ")
 
         self.assertEqual(actual_value, expected_value)
 
@@ -348,7 +336,7 @@ class TestNumericField(TestCase):
         self.field = fields.NumericField()
 
     def test_deserialize_float(self):
-        arbitrary_float = '214.8'
+        arbitrary_float = "214.8"
 
         actual_value = self.field.deserialize(arbitrary_float)
         expected_value = 214.8
@@ -356,7 +344,7 @@ class TestNumericField(TestCase):
         self.assertEqual(actual_value, expected_value)
 
     def test_deserialize_integer(self):
-        arbitrary_integer = '214'
+        arbitrary_integer = "214"
 
         actual_value = self.field.deserialize(arbitrary_integer)
         expected_value = 214
@@ -364,7 +352,7 @@ class TestNumericField(TestCase):
         self.assertEqual(actual_value, expected_value)
 
     def test_deserialize_and_lo_and_behold_it_wasnt_numeric(self):
-        arbitrary_string = 'alpha'
+        arbitrary_string = "alpha"
 
         actual_value = self.field.deserialize(arbitrary_string)
         expected_value = arbitrary_string
@@ -380,7 +368,7 @@ class TestNumericField(TestCase):
         self.assertEqual(actual_value, expected_value)
 
     def test_nonnumeric_value(self):
-        arbitrary_nonnumeric_value = 'alpha'
+        arbitrary_nonnumeric_value = "alpha"
 
         with self.assertRaises(ValueError):
             self.field.serialize(arbitrary_nonnumeric_value)
@@ -391,18 +379,18 @@ class TestStringField(TestCase):
         self.field = fields.StringField()
 
     def test_deserialize_string(self):
-        serialized_string = '&open;hello&close;'
+        serialized_string = "&open;hello&close;"
 
         actual_value = self.field.deserialize(serialized_string)
-        expected_value = '[hello]'
+        expected_value = "[hello]"
 
         self.assertEqual(actual_value, expected_value)
 
     def test_serialize_string(self):
-        unserialized_string = '[hello]'
+        unserialized_string = "[hello]"
 
         actual_value = self.field.serialize(unserialized_string)
-        expected_value = '&open;hello&close;'
+        expected_value = "&open;hello&close;"
 
         self.assertEqual(actual_value, expected_value)
 

@@ -10,7 +10,7 @@ class TaskwarriorError(Exception):
         super(TaskwarriorError, self).__init__(self.stderr)
 
     def __str__(self):
-        return "%r #%s; stderr:\"%s\"; stdout:\"%s\"" % (
+        return '%r #%s; stderr:"%s"; stdout:"%s"' % (
             self.command,
             self.code,
             self.stderr,

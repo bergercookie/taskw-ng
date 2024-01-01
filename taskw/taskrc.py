@@ -6,7 +6,7 @@ from taskw.fields import (
     DateField,
     DurationField,
     NumericField,
-    StringField
+    StringField,
 )
 
 
@@ -14,14 +14,14 @@ logger = logging.getLogger(__name__)
 
 
 def sanitize(line):
-    comment_position = line.find('#')
+    comment_position = line.find("#")
     if comment_position < 0:
         return line.strip()
     return line[:comment_position].strip()
 
 
 class TaskRc(dict):
-    """ Access the user's taskRC using a dictionary-like interface.
+    """Access the user's taskRC using a dictionary-like interface.
 
     There is a downside, though:
 
@@ -40,20 +40,16 @@ class TaskRc(dict):
     """
 
     UDA_TYPE_MAP = {
-        'date': DateField,
-        'duration': DurationField,
-        'numeric': NumericField,
-        'string': StringField,
+        "date": DateField,
+        "duration": DurationField,
+        "numeric": NumericField,
+        "string": StringField,
     }
 
     def __init__(self, path=None, overrides=None):
         self.overrides = overrides if overrides else {}
         if path:
-            self.path = os.path.normpath(
-                os.path.expanduser(
-                    path
-                )
-            )
+            self.path = os.path.normpath(os.path.expanduser(path))
             config = self._read(self.path)
         else:
             self.path = None
@@ -61,7 +57,7 @@ class TaskRc(dict):
         super(TaskRc, self).__init__(config)
 
     def _add_to_tree(self, config, key, value):
-        key_parts = key.split('.')
+        key_parts = key.split(".")
         cursor = config
         for part in key_parts[0:-1]:
             if part not in cursor:
@@ -92,28 +88,25 @@ class TaskRc(dict):
 
     def _read(self, path):
         config = {}
-        with open(path, 'r') as config_file:
+        with open(path, "r") as config_file:
             for raw_line in config_file.readlines():
                 line = sanitize(raw_line)
                 if not line:
                     continue
-                if line.startswith('include '):
+                if line.startswith("include "):
                     try:
-                        left, right = line.split(' ')
-                        config = self._merge_trees(
-                            config,
-                            TaskRc(right.strip())
-                        )
+                        left, right = line.split(" ")
+                        config = self._merge_trees(config, TaskRc(right.strip()))
                     except ValueError:
                         logger.exception(
                             "Error encountered while adding TaskRc at "
                             "'%s' (from TaskRc file at '%s')",
                             right.strip(),
-                            self.path
+                            self.path,
                         )
                 else:
                     try:
-                        left, right = line.split('=', 1)
+                        left, right = line.split("=", 1)
                         key = left.strip()
                         value = right.strip()
                         config = self._add_to_tree(config, key, value)
@@ -128,36 +121,34 @@ class TaskRc(dict):
         return self._merge_trees(config, self.overrides)
 
     def __delitem__(self, *args):
-        raise TypeError('TaskRc objects are immutable')
+        raise TypeError("TaskRc objects are immutable")
 
     def __setitem__(self, item, value):
-        raise TypeError('TaskRc objects are immutable')
+        raise TypeError("TaskRc objects are immutable")
 
     def update(self, value):
-        raise TypeError('TaskRc objects are immutable')
+        raise TypeError("TaskRc objects are immutable")
 
     def get_udas(self):
-        raw_udas = self.get('uda', {})
+        raw_udas = self.get("uda", {})
         udas = {}
 
         for k, v in raw_udas.items():
-            tw_type = v.get('type', '')
-            label = v.get('label', None)
-            choices = v.get('values', None)
+            tw_type = v.get("type", "")
+            label = v.get("label", None)
+            choices = v.get("values", None)
 
             kwargs = {}
             cls = self.UDA_TYPE_MAP.get(tw_type, StringField)
             if choices:
                 cls = ChoiceField
-                kwargs['choices'] = choices.split(',')
+                kwargs["choices"] = choices.split(",")
             if label:
-                kwargs['label'] = label
+                kwargs["label"] = label
 
             udas[k] = cls(**kwargs)
 
         return udas
 
     def __str__(self):
-        return 'TaskRc file at {path}'.format(
-            path=self.path
-        )
+        return "TaskRc file at {path}".format(path=self.path)

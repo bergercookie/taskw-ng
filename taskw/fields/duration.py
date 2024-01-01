@@ -82,13 +82,15 @@ def parse_iso8601_duration(string: str) -> timedelta:
         except ValueError:
             T_index = len(string)
 
-        fields_before_t[field_name], string0 = extract_part(string[0:T_index], field_name)
+        fields_before_t[field_name], string0 = extract_part(
+            string[0:T_index], field_name
+        )
         string = "{}{}".format(string0, string[T_index:])
 
     if not string.startswith("T"):
         raise ValueError(
             '{} is not an ISO8601 duration, expected to find the "T" character before parsing days/minutes/seconds'.format(
-                    orig_string
+                orig_string
             )
         )
     string = string[1:]

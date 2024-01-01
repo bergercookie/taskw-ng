@@ -28,7 +28,7 @@ class Field(object):
     def __repr__(self):
         return "<{cls} '{label}'>".format(
             cls=str(self.__class__.__name__),
-            label=str(self) if self._label else '(No Label)',
+            label=str(self) if self._label else "(No Label)",
         )
 
     def __eq__(self, other):
@@ -45,7 +45,7 @@ class Field(object):
 
 
 class Dirtyable(object):
-    """ Superclass for all objects implementing trackability."""
+    """Superclass for all objects implementing trackability."""
 
     def __init__(self, value=None):
         self._original_value = copy.deepcopy(value)

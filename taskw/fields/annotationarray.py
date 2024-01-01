@@ -5,13 +5,14 @@ from .base import DirtyableList
 
 
 class Annotation(str):
-    """ A special type of string that we'll use for storing annotations.
+    """A special type of string that we'll use for storing annotations.
 
     This is, for all intents and purposes, really just a string, but
     it does allow us to store additional information if we have it -- in
     this application: the annotation's entry date.
 
     """
+
     def __new__(self, description, entry=None):
         return str.__new__(self, description)
 
@@ -27,7 +28,7 @@ class Annotation(str):
 
 
 class AnnotationArrayField(ArrayField):
-    """ A special case of the ArrayField handling idiosyncrasies of Annotations
+    """A special case of the ArrayField handling idiosyncrasies of Annotations
 
     Taskwarrior will currently return to you a dictionary of values --
     the annotation's date and description -- for each annotation, but
@@ -36,6 +37,7 @@ class AnnotationArrayField(ArrayField):
     extract an entry date if one exists).
 
     """
+
     def deserialize(self, value):
         if not value:
             value = DirtyableList([])
@@ -45,8 +47,8 @@ class AnnotationArrayField(ArrayField):
             if isinstance(annotation, dict):
                 elements.append(
                     Annotation(
-                        annotation['description'],
-                        annotation['entry'],
+                        annotation["description"],
+                        annotation["entry"],
                     )
                 )
             else:

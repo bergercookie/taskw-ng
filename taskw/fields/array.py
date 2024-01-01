@@ -10,6 +10,6 @@ class ArrayField(Field):
     def serialize(self, value):
         if not value:
             value = []
-        if not hasattr(value, '__iter__'):
+        if not hasattr(value, "__iter__"):
             raise ValueError("Value must be list or tuple.")
         return value

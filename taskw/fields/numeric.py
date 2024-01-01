@@ -26,8 +26,11 @@ class NumericField(Field):
             # already desialized
             return value
         else:
-            raise ValueError("Unhandled type [{}] passed during deserialization for value [{}]"
-                             .format(type(value), value))
+            raise ValueError(
+                "Unhandled type [{}] passed during deserialization for value [{}]".format(
+                    type(value), value
+                )
+            )
 
         # If we've made it this far, somehow Taskwarrior has
         # a non-numeric value stored in this field; this shouldn't

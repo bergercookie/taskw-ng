@@ -11,46 +11,55 @@ import pytz
 from distutils.version import LooseVersion
 
 
-DATE_FORMAT = '%Y%m%dT%H%M%SZ'
+DATE_FORMAT = "%Y%m%dT%H%M%SZ"
 
 
-encode_replacements = OrderedDict([
-    ('\\', '\\\\'),
-    ('\"', '&dquot;'),
-    ('"', '&dquot;'),
-    ('[', '&open;'),
-    (']', '&close;'),
-    ('\n', ' '),
-    ('/', '\\/'),
-])
+encode_replacements = OrderedDict(
+    [
+        ("\\", "\\\\"),
+        ('"', "&dquot;"),
+        ('"', "&dquot;"),
+        ("[", "&open;"),
+        ("]", "&close;"),
+        ("\n", " "),
+        ("/", "\\/"),
+    ]
+)
 
-encode_replacements_experimental = OrderedDict([
-    ('\"', '&dquot;'),
-    ('"', '&dquot;'),
-    ('[', '&open;'),
-    (']', '&close;'),
-])
+encode_replacements_experimental = OrderedDict(
+    [
+        ('"', "&dquot;"),
+        ('"', "&dquot;"),
+        ("[", "&open;"),
+        ("]", "&close;"),
+    ]
+)
 
-decode_replacements = OrderedDict([
-    [v, k] for k, v in encode_replacements.items()
-    if k not in ('\n')  # We skip these.
-])
+decode_replacements = OrderedDict(
+    [
+        [v, k]
+        for k, v in encode_replacements.items()
+        if k not in ("\n")  # We skip these.
+    ]
+)
 
-logical_replacements = OrderedDict([
-    ('?', '\\?'),
-    ('+', '\\+'),
-    ('(', '\\('),
-    (')', '\\)'),
-    ('[', '\\['),
-    (']', '\\]'),
-    ('{', '\\{'),
-    ('}', '\\}'),
-])
+logical_replacements = OrderedDict(
+    [
+        ("?", "\\?"),
+        ("+", "\\+"),
+        ("(", "\\("),
+        (")", "\\)"),
+        ("[", "\\["),
+        ("]", "\\]"),
+        ("{", "\\{"),
+        ("}", "\\}"),
+    ]
+)
 
 
 def encode_task_value(key, value, query=False):
     if value is None:
-        value = ''
+        value = ""
     elif isinstance(value, datetime.datetime):
         if not value.tzinfo:
             #  Dates not having timezone information should be
@@ -66,7 +75,7 @@ def encode_task_value(key, value, query=False):
             # logical expressions.  They must *sometimes* be escaped.
             for left, right in logical_replacements.items():
                 # don't replace '?' if this is an exact match
-                if left == '?' and '.' not in key:
+                if left == "?" and "." not in key:
                     continue
                 value = value.replace(left, right)
         else:
@@ -86,58 +95,51 @@ def encode_query(value, version, query=True):
     for k, v in value:
         if isinstance(v, list):
             args.append(
-                "( %s )" % (" %s " % k).join([
-                    encode_query([item], version, query=False)[0] for item in v
-                ])
+                "( %s )"
+                % (" %s " % k).join(
+                    [encode_query([item], version, query=False)[0] for item in v]
+                )
             )
         else:
-            if k.endswith(".is") and version >= LooseVersion('2.4'):
+            if k.endswith(".is") and version >= LooseVersion("2.4"):
                 args.append(
-                    '%s == "%s"' % (
-                        k[:-3],
-                        encode_task_value(k, v, query=query)
-                    )
+                    '%s == "%s"' % (k[:-3], encode_task_value(k, v, query=query))
                 )
             else:
-                args.append(
-                    '%s:%s' % (
-                        k,
-                        encode_task_value(k, v, query=query)
-                    )
-                )
+                args.append("%s:%s" % (k, encode_task_value(k, v, query=query)))
 
     return args
 
 
 def clean_task(task):
-    """ Clean a task by replacing any dangerous characters """
+    """Clean a task by replacing any dangerous characters"""
     return task
 
 
 def encode_task_experimental(task):
-    """ Convert a dict-like task to its string representation
-        Used for adding a task via `task add`
+    """Convert a dict-like task to its string representation
+    Used for adding a task via `task add`
     """
     # First, clean the task:
     task = task.copy()
-    if 'tags' in task:
-        task['tags'] = ','.join(task['tags'])
+    if "tags" in task:
+        task["tags"] = ",".join(task["tags"])
     for k in task:
         task[k] = encode_task_value(k, task[k])
 
     # Then, format it as a string
     return [
-        "%s:\"%s\"" % (k, v) if v else "%s:" % (k, )
+        '%s:"%s"' % (k, v) if v else "%s:" % (k,)
         for k, v in sorted(task.items(), key=itemgetter(0))
     ]
 
 
 def encode_task(task):
-    """ Convert a dict-like task to its string representation """
+    """Convert a dict-like task to its string representation"""
     # First, clean the task:
     task = task.copy()
-    if 'tags' in task:
-        task['tags'] = ','.join(task['tags'])
+    if "tags" in task:
+        task["tags"] = ",".join(task["tags"])
     for k in task:
         for unsafe, safe in encode_replacements.items():
             if isinstance(task[k], str):
@@ -147,14 +149,13 @@ def encode_task(task):
             task[k] = task[k].strftime("%Y%m%dT%M%H%SZ")
 
     # Then, format it as a string
-    return "[%s]\n" % " ".join([
-        "%s:\"%s\"" % (k, v)
-        for k, v in sorted(task.items(), key=itemgetter(0))
-    ])
+    return "[%s]\n" % " ".join(
+        ['%s:"%s"' % (k, v) for k, v in sorted(task.items(), key=itemgetter(0))]
+    )
 
 
 def decode_task(line):
-    """ Parse a single record (task) from a task database file.
+    """Parse a single record (task) from a task database file.
 
     I don't understand why they don't just use JSON or YAML.  But
     that's okay.
@@ -170,29 +171,25 @@ def decode_task(line):
         task[key] = value
         for unsafe, safe in decode_replacements.items():
             task[key] = task[key].replace(unsafe, safe)
-    if 'tags' in task:
-        task['tags'] = task['tags'].split(',')
+    if "tags" in task:
+        task["tags"] = task["tags"].split(",")
     return task
 
 
 def make_annotation_comparable(annotation):
-    """ Make an annotation comparable.
+    """Make an annotation comparable.
 
     Some transformations occur internally when storing a message in
     Taskwarrior.  Let's flatten those out.
 
     """
-    return re.sub(
-        r'[\W_]',
-        '',
-        annotation
-    )
+    return re.sub(r"[\W_]", "", annotation)
 
 
 def get_annotation_value(annotation):
-    """ Can either be a dictionary, or a string. """
+    """Can either be a dictionary, or a string."""
     if isinstance(annotation, dict):
-        return annotation['description']
+        return annotation["description"]
     return annotation
 
 
@@ -202,9 +199,7 @@ def annotation_exists_in_list(authoritative, new):
         if not item:
             continue
         annotation = get_annotation_value(item)
-        comparable_annotations.append(
-            make_annotation_comparable(annotation)
-        )
+        comparable_annotations.append(make_annotation_comparable(annotation))
     return make_annotation_comparable(new) in comparable_annotations
 
 
@@ -224,8 +219,8 @@ def annotation_list_to_comparison_map(annotations):
     return mapping
 
 
-def convert_dict_to_override_args(config, prefix=''):
-    """ Converts a dictionary of override arguments into CLI arguments.
+def convert_dict_to_override_args(config, prefix=""):
+    """Converts a dictionary of override arguments into CLI arguments.
 
     * Converts leaf nodes into dot paths of key names leading to the leaf
       node.
@@ -241,22 +236,27 @@ def convert_dict_to_override_args(config, prefix=''):
             args.extend(
                 convert_dict_to_override_args(
                     v,
-                    prefix='.'.join([
-                        prefix,
-                        k,
-                    ]) if prefix else k
+                    prefix=".".join(
+                        [
+                            prefix,
+                            k,
+                        ]
+                    )
+                    if prefix
+                    else k,
                 )
             )
         else:
             v = str(v)
-            left = 'rc' + (('.' + prefix) if prefix else '') + '.' + k
-            right = v if ' ' not in v else '"%s"' % v
-            args.append('='.join([left, right]))
+            left = "rc" + (("." + prefix) if prefix else "") + "." + k
+            right = v if " " not in v else '"%s"' % v
+            args.append("=".join([left, right]))
     return args
 
 
 CTRLCHAR = re.compile(b"[\x00-\x08\x0e-\x1f]")
 
+
 def clean_ctrl_chars(s):
-    """ Clean string removing most (but not all) control characters """
-    return CTRLCHAR.sub(b'', s)
+    """Clean string removing most (but not all) control characters"""
+    return CTRLCHAR.sub(b"", s)

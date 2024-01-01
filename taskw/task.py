@@ -26,44 +26,49 @@ logger = logging.getLogger(__name__)
 
 class Task(dict):
     FIELDS = {
-        'annotations': AnnotationArrayField(label='Annotations'),
-        'depends': CommaSeparatedUUIDField(label='Depends Upon'),
-        'description': StringField(label='Description'),
-        'due': DateField(label='Due'),
-        'end': DateField(label='Ended'),
-        'entry': DateField(label='Entered'),
-        'id': NumericField(label='ID', read_only=True),
-        'imask': NumericField(label='Imask', read_only=True),
-        'mask': StringField(label='Mask', read_only=True),
-        'modified': DateField(label='Modified'),
-        'parent': StringField(label='Parent'),
-        'priority': ChoiceField(
-            choices=[None, 'H', 'M', 'L', ],
-            case_sensitive=False,
-            label='Priority'
-        ),
-        'project': StringField(label='Project'),
-        # TODO Convert this to a DurationField, handle values like "monthly" and "daily"
-        # explicitly
-        'recur': StringField(label='Recurrence'),
-        'scheduled': DateField(label='Scheduled'),
-        'start': DateField(label='Started'),
-        'status': ChoiceField(
+        "annotations": AnnotationArrayField(label="Annotations"),
+        "depends": CommaSeparatedUUIDField(label="Depends Upon"),
+        "description": StringField(label="Description"),
+        "due": DateField(label="Due"),
+        "end": DateField(label="Ended"),
+        "entry": DateField(label="Entered"),
+        "id": NumericField(label="ID", read_only=True),
+        "imask": NumericField(label="Imask", read_only=True),
+        "mask": StringField(label="Mask", read_only=True),
+        "modified": DateField(label="Modified"),
+        "parent": StringField(label="Parent"),
+        "priority": ChoiceField(
             choices=[
-                'pending',
-                'completed',
-                'deleted',
-                'waiting',
-                'recurring',
+                None,
+                "H",
+                "M",
+                "L",
             ],
             case_sensitive=False,
-            label='Status',
+            label="Priority",
         ),
-        'tags': ArrayField(label='Tags'),
-        'until': DateField(label='Until'),
-        'urgency': NumericField(label='Urgency', read_only=True),
-        'uuid': UUIDField(label='UUID'),
-        'wait': DateField(label='Wait'),
+        "project": StringField(label="Project"),
+        # TODO Convert this to a DurationField, handle values like "monthly" and "daily"
+        # explicitly
+        "recur": StringField(label="Recurrence"),
+        "scheduled": DateField(label="Scheduled"),
+        "start": DateField(label="Started"),
+        "status": ChoiceField(
+            choices=[
+                "pending",
+                "completed",
+                "deleted",
+                "waiting",
+                "recurring",
+            ],
+            case_sensitive=False,
+            label="Status",
+        ),
+        "tags": ArrayField(label="Tags"),
+        "until": DateField(label="Until"),
+        "urgency": NumericField(label="Urgency", read_only=True),
+        "uuid": UUIDField(label="UUID"),
+        "wait": DateField(label="Wait"),
     }
 
     def __init__(self, data, udas=None):
@@ -80,7 +85,7 @@ class Task(dict):
 
     @classmethod
     def from_stub(cls, data, udas=None):
-        """ Create a Task from an already deserialized dict. """
+        """Create a Task from an already deserialized dict."""
 
         udas = udas or {}
         fields = cls.FIELDS.copy()
@@ -121,13 +126,13 @@ class Task(dict):
 
     @classmethod
     def _deserialize(cls, key, value, fields):
-        """ Marshal incoming data into Python objects."""
+        """Marshal incoming data into Python objects."""
         converter = cls._get_converter_for_field(key, None, fields)
         return converter.deserialize(value)
 
     @classmethod
     def _serialize(cls, key, value, fields):
-        """ Marshal outgoing data into Taskwarrior's JSON format."""
+        """Marshal outgoing data into Taskwarrior's JSON format."""
         converter = cls._get_converter_for_field(key, None, fields)
         return converter.serialize(value)
 
@@ -147,7 +152,7 @@ class Task(dict):
         self._changes.append((key, from_, to))
 
     def get_changes(self, serialized=False, keep=False):
-        """ Get a journal of changes that have occurred
+        """Get a journal of changes that have occurred
 
         :param `serialized`:
             Return changes in the serialized format used by TaskWarrior.
@@ -167,10 +172,7 @@ class Task(dict):
         for k, f, t in self._changes:
             if k not in results:
                 results[k] = [f, None]
-            results[k][1] = (
-                self._serialize(k, t, self._fields)
-                if serialized else t
-            )
+            results[k][1] = self._serialize(k, t, self._fields) if serialized else t
 
         # Check for changes on subordinate items
         for k, v in self.items():
@@ -181,7 +183,8 @@ class Task(dict):
                         results[k] = [result[0], None]
                     results[k][1] = (
                         self._serialize(k, result[1], self._fields)
-                        if serialized else result[1]
+                        if serialized
+                        else result[1]
                     )
 
         # Clear out recorded changes
@@ -191,7 +194,7 @@ class Task(dict):
         return results
 
     def update(self, values, force=False):
-        """ Update this task dictionary
+        """Update this task dictionary
 
         :returns: A dictionary mapping field names specified to be updated
             and a boolean value indicating whether the field was changed.
@@ -203,11 +206,11 @@ class Task(dict):
         return results
 
     def set(self, key, value):
-        """ Set a key's value regardless of whether a change is seen."""
+        """Set a key's value regardless of whether a change is seen."""
         return self.__setitem__(key, value, force=True)
 
     def serialized(self):
-        """ Returns a serialized representation of this task."""
+        """Returns a serialized representation of this task."""
         serialized = {}
         for k, v in self.items():
             serialized[k] = self._serialize(k, v, self._fields)
