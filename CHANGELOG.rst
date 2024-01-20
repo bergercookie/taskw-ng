@@ -1,3 +1,21 @@
+`taskw-ng` changelog
+===================
+
+v0.1.0 - Hard fork and push to PyPI
+
+- Set minimum python version to 3.8
+- Switch to pyproject.toml + poetry
+- Add __version__.py
+
+----
+
+20240120 - Repo hard fork -> **taskw-ng**
+
+----
+
+`taskw` changelog
+==============
+
 1.3.1
 -----
 
