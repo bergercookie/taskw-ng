@@ -1,7 +1,7 @@
 # `taskw-ng` - Python API for the Taskwarrior DB
 
 > This project is a continuation of the [taskw python
-wrapper](https://github.com/ralphbean/taskw) python wrapper.
+wrapper](https://github.com/ralphbean/taskw).
 
 This is a python API for the [Taskwarrior](http://taskwarrior.org) command line
 task manager.
