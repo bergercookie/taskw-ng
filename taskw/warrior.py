@@ -91,7 +91,7 @@ class TaskWarriorBase(metaclass=abc.ABCMeta):
         return annotations
 
     @abc.abstractmethod
-    def load_tasks(self, command="all"):
+    def load_tasks(self, command="all") -> dict:
         """Load all tasks.
 
         Similar to TaskWarrior, a specific command may be specified:
@@ -343,11 +343,21 @@ class TaskWarriorShellout(TaskWarriorBase):
             self._execute("sync")
 
     def load_tasks_and_filter(
-        self, command, filter_: Optional[Union[Mapping[str, Any], Sequence[str]]] = None
+        self, command, filter_: Optional[Union[Mapping[str, Any], Sequence[str], str]] = None
     ):
-        """Returns a dictionary of tasks for a list of command."""
+        """Returns a dictionary of tasks for a list of command.
+        The filter_ could either be
+
+        * a raw string, like "+test_tag or +OVERDUE" or,
+        * a sequence of strings, which will be concatenated using spaces. For example if
+          filter_=["+test_tag", "+OVERDUE"] we'll query taskwarrior with the filter "+test_tag
+          +OVEREDUE" which will basically ask for tasks that have both these tags
+        * a dict (TODO - add example)
+        """
         if filter_ is None:
             query_args = ""
+        elif isinstance(filter_, str):
+            query_args = filter_
         elif isinstance(filter_, dict):
             query_args = " ".join(taskw.utils.encode_query(filter_, self.get_version()))
         else:
@@ -367,7 +377,7 @@ class TaskWarriorShellout(TaskWarriorBase):
 
         return results
 
-    def load_tasks(self, command="all"):
+    def load_tasks(self, command="all") -> dict:
         return self.load_tasks_and_filter(command=command, filter_={})
 
     def filter_tasks(self, filter_):
