@@ -1,6 +1,5 @@
 import datetime
 import uuid
-import sys
 
 from dateutil.tz import tzlocal
 from pytz import UTC, timezone

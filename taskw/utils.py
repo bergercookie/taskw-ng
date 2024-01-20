@@ -6,10 +6,8 @@ from collections import OrderedDict
 from operator import itemgetter
 
 import dateutil.tz
+import packaging.version
 import pytz
-
-from distutils.version import LooseVersion
-
 
 DATE_FORMAT = "%Y%m%dT%H%M%SZ"
 
@@ -36,11 +34,7 @@ encode_replacements_experimental = OrderedDict(
 )
 
 decode_replacements = OrderedDict(
-    [
-        [v, k]
-        for k, v in encode_replacements.items()
-        if k not in ("\n")  # We skip these.
-    ]
+    [[v, k] for k, v in encode_replacements.items() if k not in ("\n")]  # We skip these.
 )
 
 logical_replacements = OrderedDict(
@@ -101,10 +95,8 @@ def encode_query(value, version, query=True):
                 )
             )
         else:
-            if k.endswith(".is") and version >= LooseVersion("2.4"):
-                args.append(
-                    '%s == "%s"' % (k[:-3], encode_task_value(k, v, query=query))
-                )
+            if k.endswith(".is") and version >= packaging.version.parse("2.4"):
+                args.append('%s == "%s"' % (k[:-3], encode_task_value(k, v, query=query)))
             else:
                 args.append("%s:%s" % (k, encode_task_value(k, v, query=query)))
 
@@ -236,14 +228,16 @@ def convert_dict_to_override_args(config, prefix=""):
             args.extend(
                 convert_dict_to_override_args(
                     v,
-                    prefix=".".join(
-                        [
-                            prefix,
-                            k,
-                        ]
-                    )
-                    if prefix
-                    else k,
+                    prefix=(
+                        ".".join(
+                            [
+                                prefix,
+                                k,
+                            ]
+                        )
+                        if prefix
+                        else k
+                    ),
                 )
             )
         else:

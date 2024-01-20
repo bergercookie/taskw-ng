@@ -1,16 +1,16 @@
 [tool.poetry]
 name = "taskw-ng"
 version = "0.0.0"
-description = "Python bindings for your taskwarrior database"
+description = "Next generation python bindings for your taskwarrior database"
 license = "GPLv3+"
 authors = [
   "Nikos Koukis <nickkouk@gmail.com>",
   "Ralph Bean <ralph.bean@gmail.com>",
 ]
-readme = "README.rst"
+readme = "README.md"
 homepage = "https://github.com/bergercookie/taskw-ng"
 repository = "https://github.com/bergercookie/taskw-ng"
-include = []
+include = ["taskw/py.typed", "CHANGELOG.md"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Programming Language :: Python :: 3",
@@ -23,6 +23,7 @@ classifiers = [
   "Intended Audience :: Developers",
 ]
 keywords = ["taskwarrior", "task"]
+packages = [{ include = "taskw" }]
 
 # [tool.poetry.scripts]
 # [tool.poetry.extras]
@@ -131,7 +132,7 @@ omit = ["*/.pdbrc.py", "tests/*"]
 
 # pytest -----------------------------------------------------------------------
 [tool.pytest.ini_options]
-addopts = ["--doctest-modules", "-v", "norecursedirs=lib", "taskwarrior"]
+addopts = ["--doctest-modules", "-v", "--ignore", "taskwarrior"]
 
 # build-system -----------------------------------------------------------------
 [tool.poetry-dynamic-versioning]
