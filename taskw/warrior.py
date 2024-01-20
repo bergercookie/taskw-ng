@@ -9,6 +9,7 @@ import logging
 import os
 import re
 import time
+from typing import Any, Mapping, Optional, Sequence, Union
 import uuid
 import subprocess
 import sys
@@ -279,9 +280,6 @@ class TaskWarriorShellout(TaskWarriorBase):
 
         return stdout, stderr
 
-    def filter_raw(self):
-        pass
-
     def _get_json(self, *args):
         return json.loads(self._execute(*args)[0])
 
@@ -345,11 +343,19 @@ class TaskWarriorShellout(TaskWarriorBase):
         else:
             self._execute("sync")
 
-    def load_tasks(self, command="all"):
+    def load_tasks_and_filter(
+        self, command, filter_: Optional[Union[Mapping[str, Any], Sequence[str]]] = None
+    ):
         """Returns a dictionary of tasks for a list of command."""
+        if filter_ is None:
+            query_args = ""
+        elif isinstance(filter_, dict):
+            query_args = " ".join(taskw.utils.encode_query(filter_, self.get_version()))
+        else:
+            query_args = " ".join(filter_)
 
         results = dict(
-            (db, self._get_task_objects("status:%s" % db, "export"))
+            (db, self._get_task_objects(f"status:{db}", query_args, "export"))
             for db in Command.files(command)
         )
 
@@ -362,7 +368,10 @@ class TaskWarriorShellout(TaskWarriorBase):
 
         return results
 
-    def filter_tasks(self, filter_dict):
+    def load_tasks(self, command="all"):
+        return self.load_tasks_and_filter(command=command, filter_={})
+
+    def filter_tasks(self, filter_):
         """Return a filtered list of tasks from taskwarrior.
 
         Filter dict should be a dictionary mapping filter constraints
@@ -383,7 +392,7 @@ class TaskWarriorShellout(TaskWarriorBase):
         website.
 
         """
-        query_args = taskw.utils.encode_query(filter_dict, self.get_version())
+        query_args = taskw.utils.encode_query(filter_, self.get_version())
         return self._get_task_objects(*(query_args + ["export"]))
 
     def get_task(self, **kw):
