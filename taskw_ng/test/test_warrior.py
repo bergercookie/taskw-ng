@@ -3,7 +3,7 @@ import os
 import shutil
 from unittest import TestCase
 
-from taskw.warrior import TaskWarrior
+from taskw_ng.warrior import TaskWarrior
 
 
 class TestTaskWarrior(TestCase):

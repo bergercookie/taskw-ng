@@ -1,7 +1,7 @@
 import logging
 import os
 
-from taskw.fields import (
+from taskw_ng.fields import (
     ChoiceField,
     DateField,
     DurationField,

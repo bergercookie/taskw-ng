@@ -218,7 +218,7 @@ def convert_dict_to_override_args(config, prefix=""):
       node.
     * Does not include paths to leaf nodes not being non-dictionary type.
 
-    See `taskw.test.test_utils.TestUtils.test_convert_dict_to_override_args`
+    See `taskw_ng.test.test_utils.TestUtils.test_convert_dict_to_override_args`
     for details.
 
     """

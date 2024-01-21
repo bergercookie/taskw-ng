@@ -4,7 +4,7 @@ import dateutil
 from dateutil.parser import parse
 import pytz
 
-from taskw.utils import DATE_FORMAT
+from taskw_ng.utils import DATE_FORMAT
 
 from .base import Field
 

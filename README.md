@@ -6,7 +6,7 @@ wrapper](https://github.com/ralphbean/taskw).
 This is a python API for the [Taskwarrior](http://taskwarrior.org) command line
 task manager.
 
-It mainly contains the `taskw.TaskWarriorShellout` class
+It mainly contains the `taskw_ng.TaskWarriorShellout` class
 
 ## Getting `taskw-ng`
 
@@ -25,7 +25,7 @@ pip install taskw-ng
 ### Looking at tasks
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 tasks = w.load_tasks()
 tasks.keys()
@@ -39,7 +39,7 @@ type(tasks['pending'][0])
 ### Adding tasks
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 w.task_add("Eat food")
 w.task_add("Take a nap", priority="H", project="life", due="1359090000")
@@ -48,7 +48,7 @@ w.task_add("Take a nap", priority="H", project="life", due="1359090000")
 ### Retrieving tasks
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 w.get_task(id=5)
 ```
@@ -56,7 +56,7 @@ w.get_task(id=5)
 ### Updating tasks
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 id, task = w.get_task(id=14)
 task['project'] = 'Updated project name'
@@ -66,7 +66,7 @@ w.task_update(task)
 ### Deleting tasks
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 w.task_delete(id=3)
 ```
@@ -74,7 +74,7 @@ w.task_delete(id=3)
 ### Completing tasks
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 w.task_done(id=46)
 ```
@@ -84,15 +84,15 @@ w.task_done(id=46)
 You can point `taskw-ng` at different Taskwarrior databases.
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior(config_filename="~/some_project/.taskrc")
-w.task_add("Use 'taskw'.")
+w.task_add("Use taskw_ng.")
 ```
 
 ### Looking at the config
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior()
 config = w.load_config()
 config['data']['location']
@@ -104,7 +104,7 @@ config['_forcecolor']
 ### Using python-appropriate types (dates, UUIDs, etc)
 
 ```python
-from taskw import TaskWarrior
+from taskw_ng import TaskWarrior
 w = TaskWarrior(marshal=True)
 w.get_task(id=10)
 # should give the following:

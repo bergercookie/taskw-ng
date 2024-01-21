@@ -1,9 +1,9 @@
 import os
 import sys
 
-from taskw.warrior import TaskWarrior
-from taskw.taskrc import TaskRc
-from taskw.fields import NumericField, ChoiceField
+from taskw_ng.warrior import TaskWarrior
+from taskw_ng.taskrc import TaskRc
+from taskw_ng.fields import NumericField, ChoiceField
 
 
 from unittest import TestCase

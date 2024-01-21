@@ -1,6 +1,6 @@
 import logging
 
-from taskw.utils import encode_replacements_experimental
+from taskw_ng.utils import encode_replacements_experimental
 from .base import Field
 
 

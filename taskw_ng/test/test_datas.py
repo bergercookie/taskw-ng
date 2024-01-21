@@ -6,7 +6,7 @@ import dateutil.tz
 
 import pytest
 
-from taskw import TaskWarriorShellout
+from taskw_ng import TaskWarriorShellout
 
 
 TASK = {
@@ -26,8 +26,8 @@ class _BaseTestDB(object):
             pytest.skip("%r unsupported on this system" % (self.class_to_test))
 
         # Create some temporary config stuff
-        fd, fname = tempfile.mkstemp(prefix="taskw-testsrc")
-        dname = tempfile.mkdtemp(prefix="taskw-tests-data")
+        fd, fname = tempfile.mkstemp(prefix="taskw_ng-testsrc")
+        dname = tempfile.mkdtemp(prefix="taskw_ng-tests-data")
 
         with open(fname, "w") as f:
             f.writelines(

@@ -16,10 +16,10 @@ import json
 
 import kitchen.text.converters
 
-import taskw.utils
-from taskw.exceptions import TaskwarriorError
-from taskw.task import Task
-from taskw.taskrc import TaskRc
+import taskw_ng.utils
+from taskw_ng.exceptions import TaskwarriorError
+from taskw_ng.task import Task
+from taskw_ng.taskrc import TaskRc
 
 
 logger = logging.getLogger(__name__)
@@ -175,8 +175,8 @@ class TaskWarriorShellout(TaskWarriorBase):
 
     This is currently the supported version and should be considered stable.
 
-    See https://github.com/ralphbean/taskw/pull/15 for discussion
-    and https://github.com/ralphbean/taskw/issues/30 for more.
+    See https://github.com/ralphbean/taskw_ng/pull/15 for discussion
+    and https://github.com/ralphbean/taskw_ng/issues/30 for more.
     """
 
     DEFAULT_CONFIG_OVERRIDES = {
@@ -218,7 +218,7 @@ class TaskWarriorShellout(TaskWarriorBase):
     def get_configuration_override_args(self):
         config_overrides = self.DEFAULT_CONFIG_OVERRIDES.copy()
         config_overrides.update(self.config_overrides)
-        return taskw.utils.convert_dict_to_override_args(config_overrides)
+        return taskw_ng.utils.convert_dict_to_override_args(config_overrides)
 
     def _execute(self, *args):
         """Execute a given taskwarrior command with arguments
@@ -240,7 +240,7 @@ class TaskWarriorShellout(TaskWarriorBase):
         # and remove control characters
         for i in range(len(command)):
             if isinstance(command[i], str):
-                command[i] = taskw.utils.clean_ctrl_chars(command[i].encode("utf-8"))
+                command[i] = taskw_ng.utils.clean_ctrl_chars(command[i].encode("utf-8"))
 
         try:
             proc = subprocess.Popen(
@@ -359,7 +359,7 @@ class TaskWarriorShellout(TaskWarriorBase):
         elif isinstance(filter_, str):
             query_args = filter_
         elif isinstance(filter_, dict):
-            query_args = " ".join(taskw.utils.encode_query(filter_, self.get_version()))
+            query_args = " ".join(taskw_ng.utils.encode_query(filter_, self.get_version()))
         else:
             query_args = " ".join(filter_)
 
@@ -401,7 +401,7 @@ class TaskWarriorShellout(TaskWarriorBase):
         website.
 
         """
-        query_args = taskw.utils.encode_query(filter_, self.get_version())
+        query_args = taskw_ng.utils.encode_query(filter_, self.get_version())
         return self._get_task_objects(*(query_args + ["export"]))
 
     def get_task(self, **kw):
@@ -465,9 +465,9 @@ class TaskWarriorShellout(TaskWarriorBase):
             del task["uuid"]
 
         if self._marshal:
-            args = taskw.utils.encode_task_experimental(task.serialized())
+            args = taskw_ng.utils.encode_task_experimental(task.serialized())
         else:
-            args = taskw.utils.encode_task_experimental(task)
+            args = taskw_ng.utils.encode_task_experimental(task)
 
         stdout, stderr = self._execute("add", *args)
 
@@ -529,7 +529,7 @@ class TaskWarriorShellout(TaskWarriorBase):
         legacy = True
 
         if isinstance(task, Task):
-            # Let's pre-serialize taskw.task.Task instances
+            # Let's pre-serialize taskw_ng.task.Task instances
             task_uuid = str(task["uuid"])
             task = task.serialized_changes(keep=True)
             legacy = False
@@ -555,10 +555,10 @@ class TaskWarriorShellout(TaskWarriorBase):
         if legacy or "annotations" in task_to_modify:
             # Check if there are annotations, if so, look if they are
             # in the existing task, otherwise annotate the task to add them.
-            ttm_annotations = taskw.utils.annotation_list_to_comparison_map(
+            ttm_annotations = taskw_ng.utils.annotation_list_to_comparison_map(
                 self._extract_annotations_from_task(task_to_modify)
             )
-            original_annotations = taskw.utils.annotation_list_to_comparison_map(
+            original_annotations = taskw_ng.utils.annotation_list_to_comparison_map(
                 self._extract_annotations_from_task(original_task)
             )
 
@@ -571,7 +571,7 @@ class TaskWarriorShellout(TaskWarriorBase):
             if "annotations" in task_to_modify:
                 del task_to_modify["annotations"]
 
-        modification = taskw.utils.encode_task_experimental(task_to_modify)
+        modification = taskw_ng.utils.encode_task_experimental(task_to_modify)
         # Only try to modify the task if there are changes to post here
         # (changes *might* just be in annotations).
         if modification:

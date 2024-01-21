@@ -7,7 +7,7 @@ from unittest import TestCase
 import pytz
 from dateutil.tz import tzutc
 
-from taskw.task import Task
+from taskw_ng.task import Task
 
 
 class TestTaskDirtyability(TestCase):

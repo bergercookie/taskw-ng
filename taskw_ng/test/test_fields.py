@@ -4,8 +4,8 @@ import uuid
 from dateutil.tz import tzlocal
 from pytz import UTC, timezone
 
-from taskw import fields
-from taskw.fields.annotationarray import Annotation
+from taskw_ng import fields
+from taskw_ng.fields.annotationarray import Annotation
 
 from unittest import TestCase
 

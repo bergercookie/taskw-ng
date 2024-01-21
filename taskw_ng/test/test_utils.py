@@ -4,7 +4,7 @@ import random
 import dateutil.tz
 import pytz
 
-from taskw.utils import (
+from taskw_ng.utils import (
     convert_dict_to_override_args,
     decode_task,
     encode_task,

@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 
-from taskw.fields import (
+from taskw_ng.fields import (
     AnnotationArrayField,
     ArrayField,
     ChoiceField,
@@ -15,7 +15,7 @@ from taskw.fields import (
     StringField,
     UUIDField,
 )
-from taskw.fields.base import Dirtyable, DirtyableList, DirtyableDict
+from taskw_ng.fields.base import Dirtyable, DirtyableList, DirtyableDict
 
 # Sentinel value for not specifying a default
 UNSPECIFIED = object()

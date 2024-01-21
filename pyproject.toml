@@ -10,7 +10,7 @@ authors = [
 readme = "README.md"
 homepage = "https://github.com/bergercookie/taskw-ng"
 repository = "https://github.com/bergercookie/taskw-ng"
-include = ["taskw/py.typed", "CHANGELOG.md"]
+include = ["taskw_ng/py.typed", "CHANGELOG.md"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Programming Language :: Python :: 3",
@@ -23,7 +23,7 @@ classifiers = [
   "Intended Audience :: Developers",
 ]
 keywords = ["taskwarrior", "task"]
-packages = [{ include = "taskw" }]
+packages = [{ include = "taskw_ng" }]
 
 # [tool.poetry.scripts]
 # [tool.poetry.extras]
@@ -141,7 +141,7 @@ metadata = false
 dirty = false
 style = "pep440"
 
-[tool.poetry-dynamic-versioning.files."taskw/__version__.py"]
+[tool.poetry-dynamic-versioning.files."taskw_ng/__version__.py"]
 persistent-substitution = false
 
 [build-system]
