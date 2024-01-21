@@ -1,19 +1,18 @@
 import os
-import sys
-
-from taskw_ng.warrior import TaskWarrior
-from taskw_ng.taskrc import TaskRc
-from taskw_ng.fields import NumericField, ChoiceField
-
-
 from unittest import TestCase
+
+from taskw_ng.fields import ChoiceField, NumericField
+from taskw_ng.taskrc import TaskRc
+from taskw_ng.warrior import TaskWarrior
 
 
 class TestBasicLoading(TestCase):
     def setUp(self):
-        self.path_to_taskrc = os.path.join(
-            os.path.dirname(__file__),
-            "data/default.taskrc",
+        self.path_to_taskrc = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                "data/default.taskrc",
+            )
         )
 
     def test_load_config(self):
@@ -47,9 +46,11 @@ class TestBasicLoading(TestCase):
 
 class TestTaskRc(TestCase):
     def setUp(self):
-        self.path_to_taskrc = os.path.join(
-            os.path.dirname(__file__),
-            "data/default.taskrc",
+        self.path_to_taskrc = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                "data/default.taskrc",
+            )
         )
         self.taskrc = TaskRc(self.path_to_taskrc)
 

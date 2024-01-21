@@ -6,7 +6,7 @@ wrapper](https://github.com/ralphbean/taskw).
 This is a python API for the [Taskwarrior](http://taskwarrior.org) command line
 task manager.
 
-It mainly contains the `taskw_ng.TaskWarriorShellout` class
+It mainly contains the `taskw_ng.TaskWarrior` class.
 
 ## Getting `taskw-ng`
 
@@ -14,7 +14,7 @@ It mainly contains the `taskw_ng.TaskWarriorShellout` class
 
 Using `taskw-ng` requires that you first install [Taskwarrior](http://taskwarrior.org).
 
-Installing it from http://pypi.python.org/pypi/taskw-ng is easy with `pip`:
+Installing it from http://pypi.org/project/taskw-ng is easy with `pip`:
 
 ```sh
 pip install taskw-ng
