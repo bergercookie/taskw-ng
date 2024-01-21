@@ -1,7 +1,13 @@
 `taskw-ng` changelog
 ===================
 
+v0.2.0
+------
+
+- Rename main python package to avoid import conflicts, new name: taskw_ng
+
 v0.1.0 - Hard fork and push to PyPI
+-----------------------------------
 
 - Set minimum python version to 3.8
 - Switch to pyproject.toml + poetry
