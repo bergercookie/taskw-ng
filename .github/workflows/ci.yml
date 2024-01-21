@@ -53,7 +53,7 @@ jobs:
         python -m pip install pytest
     - name: Run Tests
       run: |
-        cp taskw/test/data/test.taskrc ~/.taskrc
+        cp test/data/test.taskrc ~/.taskrc
         pytest
   publish_package:
     runs-on: ubuntu-latest
