@@ -87,12 +87,12 @@ class TaskRc(dict):
         return left
 
     def _get_include_file_path(self, path: str) -> str:
-        if os.path.isabs(path):
+        if os.path.isabs(os.path.expanduser(path)):
             return path
 
         # search for this include file in a few pre-determined locations ------------------
         # 1. from the CWD (deprecated behavior in taskwarrior)
-        # 2. in $TASK_RCDIR (custom path - just to allow flexibility from the end-user side
+        # 2. in $TASK_RCDIR (custom path - just to allow flexibility from the end-user side)
         # 3. relative to the TASKRC file
         # 4. in `{/usr/,/usr/local/}/share/doc/task/rc/`
         if self.path is not None:
