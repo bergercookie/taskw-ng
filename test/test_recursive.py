@@ -5,7 +5,7 @@ from typing import Iterator
 
 import pytest
 
-from taskw_ng import TaskWarriorShellout
+from taskw_ng import TaskWarrior
 from taskw_ng.warrior import TaskWarrior
 
 TASK = {
@@ -43,7 +43,7 @@ def tw() -> Iterator[TaskWarrior]:
             pass
 
     # Create the taskwarrior db object that each test will use.
-    tw = TaskWarriorShellout(config_filename=fname, marshal=True)
+    tw = TaskWarrior(config_filename=fname, marshal=True)
     yield tw
 
     # cleanup
