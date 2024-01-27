@@ -13,3 +13,7 @@ test.html
 env/*
 
 poetry.lock
+
+.envrc
+.task/
+.taskrc
