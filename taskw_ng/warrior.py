@@ -1,6 +1,6 @@
 """ Code to interact with taskwarrior.
 
-This module contains an abstract base class and the TaskWarriorShellout implementation 
+This module mainly contains an abstract base class and the TaskWarrior implementation
 """
 import abc
 import copy
@@ -37,17 +37,9 @@ class TaskWarriorBase(metaclass=abc.ABCMeta):
     with a taskwarrior database.
     """
 
-    def __init__(self, config_filename=TASKRC, config_overrides=None, marshal=False):
+    def __init__(self, config_filename=TASKRC):
         self.config_filename = config_filename
         self.config = TaskWarriorBase.load_config(config_filename)
-        if marshal:
-            raise NotImplementedError(
-                "You must use TaskWarriorShellout to use 'marshal'"
-            )
-        if config_overrides:
-            raise NotImplementedError(
-                "You must use TaskWarriorShellout to use 'config_overrides'"
-            )
 
     def _stub_task(self, description, tags=None, **kw):
         """Given a description, stub out a task dict."""
@@ -170,7 +162,7 @@ class TaskWarriorBase(metaclass=abc.ABCMeta):
 UUID_REGEX = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 
 
-class TaskWarriorShellout(TaskWarriorBase):
+class TaskWarrior(TaskWarriorBase):
     """Interacts with taskwarrior by invoking shell commands.
 
     This is currently the supported version and should be considered stable.
@@ -198,7 +190,7 @@ class TaskWarriorShellout(TaskWarriorBase):
         config_overrides=None,
         marshal=False,
     ):
-        super(TaskWarriorShellout, self).__init__(config_filename)
+        super(TaskWarrior, self).__init__(config_filename)
         self.config_overrides = config_overrides if config_overrides else {}
         self._marshal = marshal
         self.config = TaskRc(config_filename, overrides=config_overrides)
@@ -690,6 +682,5 @@ class UnsupportedVersionException(BaseException):
     pass
 
 
-TaskWarrior = TaskWarriorShellout
 if not TaskWarrior.can_use():
     raise UnsupportedVersionException()
