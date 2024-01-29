@@ -5,14 +5,12 @@ repos:
     rev: "v4.4.0"
     hooks:
       - id: check-added-large-files
-        exclude: ^misc/
+        # exclude: ^misc/
       - id: check-ast
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
-        exclude: ^tests/test_data/sample_items.yaml
       - id: debug-statements
-        exclude: syncall/pdb_cli_utils.py
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: mixed-line-ending
@@ -86,7 +84,7 @@ repos:
         entry: poetry check
         language: system
         pass_filenames: false
-        files: "pyproject.toml|poetry.lock"
+        files: "pyproject.toml"
 
   - repo: meta
     hooks:

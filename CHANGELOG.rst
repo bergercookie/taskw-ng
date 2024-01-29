@@ -114,7 +114,7 @@ Commits
 1.1.0
 -----
 
-Primarily: 
+Primarily:
 
 - Compatibility with task-2.5.0.beta1 `91cc20f96 <https://github.com/ralphbean/taskw/commit/91cc20f96b50a4ebe72c22fb3b498b9b3e8a97f9>`_
 

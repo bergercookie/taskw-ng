@@ -1,5 +1,4 @@
 import copy
-import sys
 
 
 class Field(object):

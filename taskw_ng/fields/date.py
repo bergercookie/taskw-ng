@@ -1,8 +1,8 @@
 import datetime
 
 import dateutil
-from dateutil.parser import parse
 import pytz
+from dateutil.parser import parse
 
 from taskw_ng.utils import DATE_FORMAT
 

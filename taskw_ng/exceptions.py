@@ -1,6 +1,3 @@
-import sys
-
-
 class TaskwarriorError(Exception):
     def __init__(self, command, stderr, stdout, code):
         self.command = command

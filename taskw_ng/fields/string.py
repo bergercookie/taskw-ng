@@ -1,8 +1,8 @@
 import logging
 
 from taskw_ng.utils import encode_replacements_experimental
-from .base import Field
 
+from .base import Field
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +24,7 @@ class StringField(Field):
             return value
         if not isinstance(value, str):
             string_value = str(value)
-            logger.debug(
-                "Value %s serialized to string as '%s'", repr(value), string_value
-            )
+            logger.debug("Value %s serialized to string as '%s'", repr(value), string_value)
             value = string_value
         for left, right in encode_replacements_experimental.items():
             value = value.replace(left, right)

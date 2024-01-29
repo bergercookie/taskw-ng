@@ -5,12 +5,12 @@ import dateutil.tz
 import pytz
 
 from taskw_ng.utils import (
+    DATE_FORMAT,
+    clean_ctrl_chars,
     convert_dict_to_override_args,
     decode_task,
     encode_task,
     encode_task_experimental,
-    DATE_FORMAT,
-    clean_ctrl_chars,
 )
 
 TASK = {
@@ -137,9 +137,7 @@ class TestUtils(object):
 
     def test_encodes_zoned_datetimes(self):
         arbitrary_timezone = pytz.timezone("America/Los_Angeles")
-        arbitrary_zoned_datetime = datetime.datetime.now().replace(
-            tzinfo=arbitrary_timezone
-        )
+        arbitrary_zoned_datetime = datetime.datetime.now().replace(tzinfo=arbitrary_timezone)
         task = {"arbitrary_field": arbitrary_zoned_datetime}
 
         actual_encoded_task = encode_task_experimental(task)

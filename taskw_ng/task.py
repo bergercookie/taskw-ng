@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import sys
 
 from taskw_ng.fields import (
@@ -15,7 +14,7 @@ from taskw_ng.fields import (
     StringField,
     UUIDField,
 )
-from taskw_ng.fields.base import Dirtyable, DirtyableList, DirtyableDict
+from taskw_ng.fields.base import Dirtyable, DirtyableDict, DirtyableList
 
 # Sentinel value for not specifying a default
 UNSPECIFIED = object()

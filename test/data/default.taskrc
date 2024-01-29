@@ -8,4 +8,3 @@ beta.one = TRUE
 include test/data/included.taskrc
 
 gamma.one = TRUE
-

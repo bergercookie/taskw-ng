@@ -1,8 +1,8 @@
-import packaging
-
 import uuid
 
+import packaging
 import packaging.version
+
 from .base import DirtyableList, Field
 
 

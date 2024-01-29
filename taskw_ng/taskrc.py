@@ -1,14 +1,7 @@
 import logging
 import os
 
-from taskw_ng.fields import (
-    ChoiceField,
-    DateField,
-    DurationField,
-    NumericField,
-    StringField,
-)
-
+from taskw_ng.fields import ChoiceField, DateField, DurationField, NumericField, StringField
 
 logger = logging.getLogger(__name__)
 
@@ -141,10 +134,8 @@ class TaskRc(dict):
                         config = self._merge_trees(config, TaskRc(right.strip()))
                     except ValueError:
                         logger.exception(
-                            (
-                                "Error encountered while adding TaskRc at "
-                                "'%s' (from TaskRc file at '%s')"
-                            ),
+                            "Error encountered while adding TaskRc at "
+                            "'%s' (from TaskRc file at '%s')",
                             right.strip(),
                             self.path,
                         )
@@ -156,10 +147,8 @@ class TaskRc(dict):
                         config = self._add_to_tree(config, key, value)
                     except ValueError:
                         logger.exception(
-                            (
-                                "Error encountered while processing configuration "
-                                "setting '%s' (from TaskRc file at '%s')"
-                            ),
+                            "Error encountered while processing configuration "
+                            "setting '%s' (from TaskRc file at '%s')",
                             line,
                             self.path,
                         )

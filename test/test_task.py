@@ -95,8 +95,7 @@ class TestTaskMarshalling(TestCase):
             ),
             "description": "&open;Something important",
             "due": (
-                datetime.datetime.now().replace(tzinfo=pytz.UTC)
-                + datetime.timedelta(hours=1)
+                datetime.datetime.now().replace(tzinfo=pytz.UTC) + datetime.timedelta(hours=1)
             ).strftime("%Y%m%dT%H%M%SZ"),
             "tags": ["one", "two", "three"],
             "urgency": 10,
@@ -151,8 +150,7 @@ class TestTaskMarshalling(TestCase):
             ),
             "description": "&open;Something important",
             "due": (
-                datetime.datetime.now().replace(tzinfo=pytz.UTC)
-                + datetime.timedelta(hours=1)
+                datetime.datetime.now().replace(tzinfo=pytz.UTC) + datetime.timedelta(hours=1)
             ).strftime("%Y%m%dT%H%M%SZ"),
             "tags": ["one", "two", "three"],
             "urgency": 10,
@@ -181,15 +179,13 @@ class TestTaskMarshalling(TestCase):
             "\n".join(
                 [
                     input_add_data.getvalue(),
-                    (
-                        "{"
-                        '"description":"Go to Camelot again",'
-                        '"entry":"20180618T030242Z",'
-                        '"status":"pending",'
-                        '"start":"20181012T110605Z",'
-                        '"uuid":"daa3ff05-f716-482e-bc35-3e1601e50778"'
-                        "}"
-                    ),
+                    "{"
+                    '"description":"Go to Camelot again",'
+                    '"entry":"20180618T030242Z",'
+                    '"status":"pending",'
+                    '"start":"20181012T110605Z",'
+                    '"uuid":"daa3ff05-f716-482e-bc35-3e1601e50778"'
+                    "}",
                 ]
             ),
         )
@@ -203,9 +199,7 @@ class TestTaskMarshalling(TestCase):
         assert on_add_task.get("start") == datetime.datetime(
             2018, 10, 12, 11, 6, 5, tzinfo=tzutc()
         )
-        assert on_add_task.get("uuid") == uuid.UUID(
-            "daa3ff05-f716-482e-bc35-3e1601e50778"
-        )
+        assert on_add_task.get("uuid") == uuid.UUID("daa3ff05-f716-482e-bc35-3e1601e50778")
 
         on_modify_task = Task.from_input(input_file=input_modify_data, modify=True)
         assert on_modify_task.get("description") == "Go to Camelot again"
@@ -216,6 +210,4 @@ class TestTaskMarshalling(TestCase):
         assert on_modify_task.get("start") == datetime.datetime(
             2018, 10, 12, 11, 6, 5, tzinfo=tzutc()
         )
-        assert on_modify_task.get("uuid") == uuid.UUID(
-            "daa3ff05-f716-482e-bc35-3e1601e50778"
-        )
+        assert on_modify_task.get("uuid") == uuid.UUID("daa3ff05-f716-482e-bc35-3e1601e50778")

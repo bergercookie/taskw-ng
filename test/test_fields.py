@@ -1,13 +1,12 @@
 import datetime
 import uuid
+from unittest import TestCase
 
 from dateutil.tz import tzlocal
 from pytz import UTC, timezone
 
 from taskw_ng import fields
 from taskw_ng.fields.annotationarray import Annotation
-
-from unittest import TestCase
 
 
 class TestAnnotationArrayField(TestCase):
@@ -300,9 +299,9 @@ class TestDateField(TestCase):
         )
 
         actual_value = self.field.serialize(arbitrary_date)
-        expected_value = UTC.normalize(
-            arbitrary_date.replace(tzinfo=tzlocal())
-        ).strftime("%Y%m%dT%H%M%SZ")
+        expected_value = UTC.normalize(arbitrary_date.replace(tzinfo=tzlocal())).strftime(
+            "%Y%m%dT%H%M%SZ"
+        )
 
         self.assertEqual(actual_value, expected_value)
 

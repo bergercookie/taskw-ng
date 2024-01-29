@@ -59,6 +59,4 @@ class AnnotationArrayField(ArrayField):
     def serialize(self, value):
         if not value:
             value = []
-        return super(AnnotationArrayField, self).serialize(
-            [str(entry) for entry in value]
-        )
+        return super(AnnotationArrayField, self).serialize([str(entry) for entry in value])
