@@ -311,7 +311,7 @@ class TaskWarrior(TaskWarriorBase):
     def can_use(cls):
         """Returns true if runtime requirements of experimental mode are met"""
         try:
-            return cls.get_version() > version.parse("2.3")
+            return cls.get_version() >= version.parse("2.5")
         except FileNotFoundError:
             # FileNotFound is raised if subprocess.Popen fails to find
             # the executable.

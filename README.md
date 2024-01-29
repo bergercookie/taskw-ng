@@ -4,9 +4,7 @@
 wrapper](https://github.com/ralphbean/taskw).
 
 This is a python API for the [Taskwarrior](http://taskwarrior.org) command line
-task manager.
-
-It mainly contains the `taskw_ng.TaskWarrior` class.
+task manager. It supports interacting with Taskwarirrior version >= `2.5`.
 
 ## Getting `taskw-ng`
 
