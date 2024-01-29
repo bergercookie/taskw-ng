@@ -55,6 +55,14 @@ def parse_iso8601_duration(string: str) -> timedelta:
     349700
     >>> dt.seconds
     23241
+    >>> dt = parse_iso8601_duration("P360D")
+    >>> dt.days
+    360
+    >>> dt.seconds
+    0
+    >>> dt = parse_iso8601_duration("P2Y3M4D")
+    >>> assert dt.days == 825
+    >>> assert dt.seconds == 43200
     """
     orig_string = string
     if not string.startswith("P"):
@@ -62,12 +70,7 @@ def parse_iso8601_duration(string: str) -> timedelta:
             '{} is not an ISO8601 duration, expected to find the "P" character at the start'
             .format(orig_string)
         )
-    if "T" not in string:
-        raise ValueError(
-            '{} is not an ISO8601 duration, expected to find the "T" character'.format(
-                orig_string
-            )
-        )
+
     string = string[1:]
 
     fields_before_t = {"Y": 0.0, "M": 0.0, "D": 0.0}
@@ -85,16 +88,16 @@ def parse_iso8601_duration(string: str) -> timedelta:
         fields_before_t[field_name], string0 = extract_part(string[0:T_index], field_name)
         string = "{}{}".format(string0, string[T_index:])
 
-    if not string.startswith("T"):
-        raise ValueError(
-            f'{orig_string} is not an ISO8601 duration, expected to find the "T" character'
-            " before parsing days/minutes/seconds"
-        )
-    string = string[1:]
+    if string.startswith("T"):
+        string = string[1:]
 
-    hours, string = extract_part(string, "H")
-    minutes, string = extract_part(string, "M")
-    seconds, string = extract_part(string, "S")
+        hours, string = extract_part(string, "H")
+        minutes, string = extract_part(string, "M")
+        seconds, string = extract_part(string, "S")
+    else:
+        hours = 0
+        minutes = 0
+        seconds = 0
 
     # rough conversion if years and months are given
     days = fields_before_t["D"]
