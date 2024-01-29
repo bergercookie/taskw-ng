@@ -1,5 +1,6 @@
 from datetime import timedelta
-from typing import Dict, Optional, Tuple
+from typing import Optional, Tuple
+
 from .base import Field
 
 
@@ -58,9 +59,8 @@ def parse_iso8601_duration(string: str) -> timedelta:
     orig_string = string
     if not string.startswith("P"):
         raise ValueError(
-            '{} is not an ISO8601 duration, expected to find the "P" character at the start'.format(
-                orig_string
-            )
+            '{} is not an ISO8601 duration, expected to find the "P" character at the start'
+            .format(orig_string)
         )
     if "T" not in string:
         raise ValueError(
@@ -82,16 +82,13 @@ def parse_iso8601_duration(string: str) -> timedelta:
         except ValueError:
             T_index = len(string)
 
-        fields_before_t[field_name], string0 = extract_part(
-            string[0:T_index], field_name
-        )
+        fields_before_t[field_name], string0 = extract_part(string[0:T_index], field_name)
         string = "{}{}".format(string0, string[T_index:])
 
     if not string.startswith("T"):
         raise ValueError(
-            '{} is not an ISO8601 duration, expected to find the "T" character before parsing days/minutes/seconds'.format(
-                orig_string
-            )
+            f'{orig_string} is not an ISO8601 duration, expected to find the "T" character'
+            " before parsing days/minutes/seconds"
         )
     string = string[1:]
 
@@ -126,7 +123,7 @@ class DurationField(Field):
         if value is None:
             return None
 
-        # TODO atm (220220529) taskwarrior does not support float notation for its fields (i.e., the
-        # following throws an exception on the CLI (task 734 mod durationuda:PT10M5.2S)
-        # I'm converting it all  to seconds
+        # TODO atm (220220529) taskwarrior does not support float notation for its fields
+        # (i.e., the following throws an exception on the CLI (task 734 mod
+        # durationuda:PT10M5.2S) I'm converting it all to seconds
         return "PT{}S".format(int(value.total_seconds()))
